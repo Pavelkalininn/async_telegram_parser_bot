@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  bot:
+    container_name: telegram-bot
+    build: .
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - db
+    volumes:
+      - database:/app/database/
+volumes:
+  database:
