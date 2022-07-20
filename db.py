@@ -2,8 +2,12 @@ import logging
 import sqlite3
 
 
-def my_connection():
-    return sqlite3.connect('database/example.db')
+def sqlite_connection():
+    try:
+        return sqlite3.connect('database/example.db')
+    except sqlite3.Error as error:
+        logging.error(
+            f"Ошибка при создании db sqlite {error}", exc_info=True)
 
 
 def lower_string(_str):
@@ -12,17 +16,16 @@ def lower_string(_str):
 
 def cities_create_update(cities) -> None:
     try:
-        sqlite_connection = my_connection()
+        connection = sqlite_connection()
         create_table = (
             'CREATE TABLE IF NOT EXISTS cities'
             '(name TEXT PRIMARY KEY,'
             ' href TEXT,'
             ' population INTEGER)'
         )
-        cursor = sqlite_connection.cursor()
-        logging.info("База городов создана и успешно подключена к PostrgeSQL")
+        cursor = connection.cursor()
         cursor.execute(create_table)
-        logging.info('Таблица PostrgeSQL создана')
+        logging.info("База городов создана и успешно подключена к sqlite")
         insert = """INSERT INTO cities
                 (name, href, population)
                 VALUES (?, ?, ?)
@@ -32,21 +35,22 @@ def cities_create_update(cities) -> None:
                 EXCLUDED.population);"""
         cursor.executemany(
             insert, (*cities, ))
+        logging.info("Обновлённые данные внесены в sqlite")
         cursor.close()
-        sqlite_connection.commit()
+        connection.commit()
     except sqlite3.Error as error:
         logging.error(
             f"Ошибка при подключении к sqlite {error}", exc_info=True)
     finally:
-        if sqlite_connection:
-            sqlite_connection.close()
+        if connection:
+            connection.close()
 
 
 def cities_find(city_fragment) -> list:
     try:
-        sqlite_connection = my_connection()
-        cursor = sqlite_connection.cursor()
-        sqlite_connection.create_function("lower_function", 1, lower_string)
+        connection = sqlite_connection()
+        cursor = connection.cursor()
+        connection.create_function("lower_function", 1, lower_string)
         query = """SELECT name, href, population
                 FROM cities
                 WHERE lower_function(name)
@@ -55,13 +59,14 @@ def cities_find(city_fragment) -> list:
             query,
             ('%' + city_fragment.lower() + '%',)
         )
+        logging.info("Запрос городов из БД выполнен")
         records = cursor.fetchall()
         cursor.close()
-        sqlite_connection.commit()
+        connection.commit()
         return records
     except sqlite3.Error as error:
         logging.error(
             f"Ошибка при подключении к sqlite {error}", exc_info=True)
     finally:
-        if sqlite_connection:
-            sqlite_connection.close()
+        if connection:
+            connection.close()

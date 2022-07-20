@@ -1,2 +1,8 @@
+import logging
+
+
 class BotException(Exception):
-    pass
+
+    def __init__(self, message):
+        logging.error(message)
+

@@ -54,7 +54,7 @@ def get_api_answer():
     try:
         wiki_page = requests.get(RESPONSE_URL)
         if wiki_page.status_code != HTTPStatus.OK:
-            raise Exception(
+            raise BotException(
                 f"Пришел некорректный ответ от сервера:"
                 f" status_code - {wiki_page.status_code}")
         else:
@@ -69,8 +69,7 @@ def api_parsing() -> Optional[list]:
     """Парсим полученную страницу."""
     response = get_api_answer()
     if not response:
-        logging.error('Не получен ответ от сервера.')
-        return
+        raise BotException('Не получен ответ от сервера')
     xml_page = response.get('parse').get('text').get('*')
     if xml_page:
         table = BeautifulSoup(xml_page, 'xml').find_all(
@@ -86,6 +85,7 @@ def api_parsing() -> Optional[list]:
                 population = row.find_all('td')[4].get('data-sort-value')
                 cities.append((name, href, int(population)))
             return cities
+    raise BotException('На странице с городами изменилась компоновка страницы')
 
 
 def main():
