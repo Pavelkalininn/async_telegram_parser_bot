@@ -35,7 +35,7 @@ yarl==1.7.2
 
 ### Заполнить .env файл по шаблону:
 
-    [example.env](example.env)
+[example.env](example.env)
 
 ### И выполнить в папке с работой :
 
