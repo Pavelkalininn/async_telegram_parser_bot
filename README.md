@@ -1,13 +1,13 @@
-## Ассинхронный телеграм-бот обновляет информацию с API Wikipedia по запросу администратора и возвращает численность населения города Московской области и ссылку на его описание на Wikipedia.
+## The asynchronous telegram bot updates information from the Wikipedia API at the request of the administrator and returns the population of the city of the Moscow region and a link to its description on Wikipedia.
 
-### Описание
+### Description
 
-Предназначен для получения численности населения 
-города московской области по его названию. Если ввести часть названия города, 
-то в ответ придут подходящие варианты (если подходит только один город, или если введено название города целиком, 
-то его численность и ссылка на Wiki).
+Designed to get the population size
+cities of the Moscow region by its name. If you enter part of the name of the city,
+then suitable options will come in response (if only one city is suitable, or if the name of the city is entered in its entirety,
+then its number and a link to the Wiki).
 
-### Технологии
+### Technologies
 
 aiohttp==3.8.1
 aiosignal==1.2.0
@@ -29,27 +29,27 @@ typing_extensions==4.3.0
 urllib3==1.26.10
 yarl==1.7.2
 
-### Для запуска проекта его необходимо склонировать командой:
+### To start a project, it must be cloned with the command:
 
     git clone git@github.com:Pavelkalininn/async_telegram_parser_bot.git
 
-### Заполнить .env файл по шаблону:
+### Fill in the .env file according to the template:
 
 [example.env](example.env)
 
-### И выполнить в папке с работой :
+### And execute in the work folder:
 
     docker-compose up -d --build
 
-### После чего при отправке боту токен которого вы указали в .env файле команды start:
+### After that, when sending the bot the token of which you specified in the .env file of the start command:
 
     /start
 
-При совпадения вашего id с id админа, также указанного в .env станет доступна кнопка update.
-Если же ваши id не совпали вернется текст с описанием сервиса и возможность запрашивать численность населения городов Московской области.
+If your id matches the admin id also specified in .env, the update button will be available.
+If your IDs do not match, the text with the description of the service and the ability to request the population of the cities of the Moscow region will be returned.
 
-### Для остановки контейнера и очистки данных необходимо ввести:
+### To stop the container and clear the data, you must enter:
 
     docker-compose down -v
 
-## Автор: [__Паша Калинин__](https://github.com/Pavelkalininn)
+## Author: [__Pavel Kalinin__](https://github.com/Pavelkalininn)
